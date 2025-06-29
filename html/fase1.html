@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fase 1 - Jogo</title>
+  <link rel="icon" href="../assets/imagens/favicon.png"/>
+  <link rel="stylesheet" href="../css/fase1.css" />
+  <link rel="stylesheet" href=../css/controles-touch.css">
+</head>
+<body>
+
+    <div id="contador-chaves">
+      <span>🔑 x <span id="numero-chaves">0</span></span>
+    </div>
+
+  <div class="cenario">
+    <img src="../assets/imagens/clareira.png" alt="Cenário da fase 1" />
+    
+    <div id="player"></div>
+    <div id="game-area"></div>
+    
+    <div class="chave" style="top: 50px; left: 100px;"></div>
+    <div class="chave" style="top: 200px; left: 250px;"></div>
+    <div class="chave" style="top: 150px; left: 400px;"></div>
+
+    <div class="inimigo" style="top: 100px; left: 300px;"></div>
+    <div class="inimigo" style="top: 250px; left: 500px;"></div>
+  </div>
+
+  <div id="game-over" style="display:none;">
+    <div class="game-over-content">
+      <h1>Game Over</h1>
+        <p>Você perdeu! Encostou em um inimigo.</p>
+      <button onclick="reiniciarFase()">Tentar Novamente</button>
+    </div>
+  </div>
+
+  <div id="tela-vitoria" style="display:none;">
+  <div class="vitoria-content">
+    <h1>Você Venceu!</h1>
+    <p>Parabéns por completar a fase!</p>
+    <button onclick="window.reiniciarFase()">Jogar de Novo</button>
+    <button onclick="proximaFase()">Próxima Fase</button>
+  </div>
+</div>
+
+  <audio id="som-colisao" src="../assets/sons/colisao.mp3" preload="auto"></audio>
+  <audio id="som-chave" src="../assets/sons/coleta-chave.mp3" preload="auto"></audio>
+
+  <script src="../js/volume.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      VolumeControl.criarSliderVolume({
+        container: document.body,
+        posicao: { top: "10px", right: "10px" },
+        titulo: "Volume da fase"
+      });
+
+      if (slider) {
+        console.log("Slider criado com valor:", slider.value);
+      } else {
+        console.error("Slider não foi criado!");
+      }
+    });
+  </script>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.VolumeControl) {
+      console.log("VolumeControl carregado!");
+      console.log("Volume atual:", VolumeControl.volume);
+    } else {
+      console.error("VolumeControl não está definido!");
+    }
+  });
+
+<div id="controle-container"></div>
+
+  fetch('html/controles-touch.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('controle-container').innerHTML = html;
+    });
+</script>
+
+  <script src="../js/colisao.js"></script>
+  <script src="../js/jogador.js"></script>
+  <script src="../js/chaves.js"></script>
+  <script src="../js/inimigos.js"></script>
+  <script src="../js/controle.js"></script>
+  <script src="../js/script.js"></script>
+  <script src="../js/fases.js"></script>
+</body>
+</html>

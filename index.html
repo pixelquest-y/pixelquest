@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>PixelQuest</title>
+  <link rel="icon" href="assets/imagens/favicon.png"/>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="menu" class="menu-container">
+    <h1>PIXEL QUEST</h1>
+    <ul class="menu">
+      <li onclick="iniciarJogo()" onmouseover="playHover()" onmousedown="playClick()">Iniciar</li>
+      <li onclick="mostrarTela('opcoes')" onmouseover="playHover()" onmousedown="playClick()">Opções</li>
+      <li onclick="mostrarTela('creditos')" onmouseover="playHover()" onmousedown="playClick()">Créditos</li>
+      <li onclick="sair()" onmouseover="playHover()" onmousedown="playClick()">Sair</li>
+    </ul>
+  </div>
+
+  <!-- Telas -->
+  <div id="jogo" class="tela" style="display:none;">
+    <h2>Jogo Iniciado!</h2>
+    <button onclick="voltarMenu()">Voltar</button>
+  </div>
+
+  <div id="fase1" class="tela" style="display:none;">
+    <h2>Fase 1: Começo da Aventura</h2>
+    <p>Aqui começa sua jornada!</p>
+    <button onclick="voltarMenu()">Voltar ao Menu</button>
+  </div>
+
+  <div id="opcoes" class="tela" style="display:none;">
+    <h2>Opções do Jogo</h2>
+
+    <div class="opcao">
+      <label for="volume">Volume:</label>
+      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.3" />
+    </div>
+
+    <button onclick="voltarMenu()">Voltar</button>
+  </div>
+
+  <div id="creditos" class="tela" style="display:none;">
+    <h2>Créditos</h2>
+    <ul class="lista-creditos">
+      <li><strong>Desenvolvedor:</strong> Max Victor Araújo Maia</li>
+      <li><strong>Design:</strong> Max Victor Araújo Maia</li>
+      <li><strong>Testes:</strong> Equipe de Testes</li>
+      <li><strong>Trilha Sonora:</strong> Sons livres de direitos</li>
+      <li><strong>Agradecimentos:</strong> Todos os colaboradores e amigos</li>
+    </ul>
+    <button onclick="voltarMenu()">Voltar</button>
+  </div>
+
+  <div id="despedida" class="tela" style="display:none;">
+    <h2>Até logo!</h2>
+    <p>Obrigado por jogar.</p>
+    <button onclick="voltarMenu()">Voltar ao Menu</button>
+  </div>
+
+  <!-- Áudios -->
+  <audio id="hover-sound" src="assets/sons/hover.wav" preload="auto"></audio>
+  <audio id="click-sound" src="assets/sons/click.wav" preload="auto"></audio>
+
+  <script src="js/volume.js"></script>
+<script>
+    // Sincroniza slider do menu com VolumeControl
+    const sliderMenu = document.getElementById("volume");
+
+    function atualizarBarraVolume(valor) {
+      sliderMenu.style.background = `linear-gradient(90deg, #4CAF50 0%, #4CAF50 ${valor * 100}%, #ddd ${valor * 100}%, #ddd 100%)`;
+    }
+
+    sliderMenu.value = VolumeControl.volume;
+    atualizarBarraVolume(sliderMenu.value);
+
+    sliderMenu.addEventListener("input", e => {
+      const novoVolume = parseFloat(e.target.value);
+      VolumeControl.volume = novoVolume;
+      atualizarBarraVolume(novoVolume);
+
+      // Atualiza volume dos sons do menu
+      document.getElementById("hover-sound").volume = novoVolume;
+      document.getElementById("click-sound").volume = novoVolume;
+    });
+  </script>
+
+  <script src="js/colisao.js"></script>
+  <script src="js/jogador.js"></script>
+  <script src="js/chaves.js"></script>
+  <script src="js/inimigos.js"></script>
+  <script src="js/efeitos.js"></script>
+  <script src="js/controle.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

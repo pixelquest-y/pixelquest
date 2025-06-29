@@ -1,0 +1,29 @@
+#controles-touch {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  display: none; /* escondido por padrão */
+  gap: 12px;
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* Só aparece em telas pequenas (celular) */
+@media (max-width: 768px) {
+  #controles-touch {
+    display: flex;
+  }
+}
+
+#controles-touch button {
+  width: 60px;
+  height: 60px;
+  font-size: 20px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+}

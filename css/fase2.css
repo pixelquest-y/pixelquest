@@ -1,0 +1,406 @@
+body {
+  background-color: #012f6be1;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #0ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  user-select: none;
+  justify-content: center;
+}
+
+#contador-chaves {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid gold;
+  border-radius: 10px;
+  padding: 5px 10px;
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  box-shadow: 0 0 10px gold;
+}
+
+.cenario {
+  position: relative;
+  width: 800px;
+  height: 500px;
+  border: 3px solid #444;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px #0af;
+}
+
+.cenario img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Player */
+#player {
+  position: absolute;
+  width: 80px; /* Largura real de UM frame */
+  height: 80px; /* Altura real de UM frame */
+  background: url('../assets/imagens/player.png') no-repeat center center;
+  background-size: contain;
+  image-rendering: pixelated;
+  transition: left 0.1s, top 0.1s;
+  z-index: 10;
+}
+
+#player.andando {
+  background: url('../assets/imagens/player-spritesheet.png') no-repeat;
+  background-size: 400px 80px; /* 5 frames * 80px = 400px de largura total */
+  animation: andar 0.5s steps(5) infinite;
+}
+
+#player.lento {
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+
+@keyframes andar {
+  from { background-position: 0 0; }
+  to { background-position: -400px 0; } /* Vai até o final da imagem de 160px */
+}
+
+@keyframes respirando {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); } /* levemente maior no meio da respiração */
+  100% { transform: scale(1); }
+}
+
+.respirando {
+  animation: respirando 1.5s ease-in-out infinite;
+}
+
+/* Dano: piscar */
+.dano {
+  animation: piscar 0.3s linear 3; /* pisca 3 vezes */
+}
+
+@keyframes piscar {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Morte: girar e sumir */
+.morrer {
+  animation: morrer 0.8s forwards;
+}
+
+@keyframes morrer {
+  0% { transform: rotate(0) scale(1); opacity: 1; }
+  100% { transform: rotate(720deg) scale(0); opacity: 0; }
+}
+
+/* Inimigo */
+.inimigo {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: url('../assets/imagens/inimigo.png') no-repeat center center;
+  background-size: contain;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #f00;
+  z-index: 9;
+}
+
+@keyframes respirando {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); } /* levemente maior no meio da respiração */
+  100% { transform: scale(1); }
+}
+
+.respirando {
+  animation: respirando 1.5s ease-in-out infinite;
+}
+
+/* Chaves */
+.chave {
+  position: absolute;
+  width: 45px;
+  height: 45px;
+  background: url('../assets/imagens/chave.png') no-repeat center center;
+  background-size: contain;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 8;
+  animation: girarVertical 2s linear infinite, brilhar 1.5s ease-in-out infinite;
+}
+
+/* Obstáculos novos */
+.obstaculo {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: url('../assets/imagens/arvore.png') no-repeat center center;
+  z-index: 5;
+  background-size: cover;
+}
+
+/* Animações */
+@keyframes girarVertical {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+@keyframes brilhar {
+  50% { box-shadow: 0 0 20px gold; }
+  100% { box-shadow: 0 0 5px gold; }
+}
+
+#game-over {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Game Over */
+
+#game-over {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 10, 10, 0.8); /* escuro semitransparente */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.game-over-content {
+  background: #1e1e2f;
+  color: #fff;
+  padding: 40px 60px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 0 20px #ff1e1e;
+  animation: scaleUp 0.5s ease-in-out;
+}
+
+.game-over-content h1 {
+  font-size: 3em;
+  margin-bottom: 10px;
+  color: #ff4c4c;
+}
+
+.game-over-content p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.game-over-content button {
+  background-color: #ff4c4c;
+  border: none;
+  color: white;
+  padding: 12px 25px;
+  font-size: 1em;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.game-over-content button:hover {
+  background-color: #e03c3c;
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+#game-area {
+  position: relative;
+  width: 800px; 
+  height: 500px;
+  top: 0;
+  left: 0;
+}
+
+#tela-vitoria {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, rgba(0,0,30,0.95) 0%, rgba(0,0,80,0.95) 100%);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.vitoria-content {
+  background: rgba(10, 10, 50, 0.9);
+  padding: 50px 80px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 0 30px #00ccff;
+  animation: pulseBlue 2s infinite;
+}
+
+.vitoria-content h1 {
+  font-size: 3em;
+  color: #00ccff;
+  text-shadow: 0 0 15px #00ffff;
+}
+
+.vitoria-content p {
+  font-size: 1.2em;
+  margin: 20px 0;
+  color: #cceeff;
+}
+
+.vitoria-content button {
+  background: linear-gradient(45deg, #0066ff, #00ccff);
+  border: none;
+  color: white;
+  padding: 14px 30px;
+  font-size: 1em;
+  border-radius: 12px;
+  margin: 0 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,204,255,0.5);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.vitoria-content button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #00e6ff;
+}
+
+/* Animações extras */
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes pulseBlue {
+  0% {box-shadow: 0 0 20px #00ccff;}
+  50% {box-shadow: 0 0 40px #00ffff;}
+  100% {box-shadow: 0 0 20px #00ccff;}
+}
+
+.dano {
+  animation: piscar 0.3s linear infinite;
+}
+
+#game-area {
+  position: relative;
+  width: 800px;
+  height: 500px;
+}
+
+/* Responsividade */
+@media (max-width: 800px) {
+  .cenario {
+    width: 100vw;
+    height: 62.5vw; /* proporcional a 800x500 */
+    max-height: 100vh;
+  }
+
+  #game-area {
+    width: 100vw;
+    height: 62.5vw;
+    max-height: 100vh;
+  }
+
+  #player, .inimigo, .chave, .obstaculo {
+    width: 10vw;
+    height: 10vw;
+  }
+
+  #contador-chaves {
+    transform: scale(0.8);
+    top: 5px;
+    left: 5px;
+  }
+}
+
+/* Bloqueio modo retrato */
+@media (orientation: portrait) {
+  body::before {
+    content: "Por favor, gire seu dispositivo para a horizontal para jogar.";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.95);
+    color: #0ff;
+    font-size: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    text-align: center;
+    padding: 20px;
+  }
+  .cenario, #game-area {
+    display: none;
+  }
+}
+
+#controles-touch {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  gap: 12px;
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 12px 16px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+#controles-touch button {
+  width: 64px;
+  height: 64px;
+  font-size: 24px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(145deg, #444, #222);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 4px 4px 6px #1a1a1a, -4px -4px 6px #555555;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+#controles-touch button:hover {
+  background: linear-gradient(145deg, #555, #333);
+  box-shadow: 0 0 12px #00ffff;
+  transform: scale(1.1);
+}
+
+#controles-touch button:active {
+  background: linear-gradient(145deg, #222, #111);
+  box-shadow: inset 2px 2px 6px #000;
+  transform: scale(0.95);
+}
